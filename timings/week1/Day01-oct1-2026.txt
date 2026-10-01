@@ -1,0 +1,2 @@
+DAY 01 - Practice done on 1 Oct 2026
+Added L1 week1/Day01 content (Basics) in coding_practice/week1/Day01-oct1-2026.txt: typed Ansible playbook myself, added Terraform, Kubernetes, Shell, Jenkins and GitLab CI sections
