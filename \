@@ -1,0 +1,157 @@
+DAY 03 - users, security groups, Enc Vars
+
+
+Anisble Task - create user
+
+
+---
+- name: Create my admin user
+  hosts: all
+  become:yes
+
+
+  tasks:
+    - name: Create user himanshi
+      user: 
+        name: himanshi 
+        shell: /bin/bash
+  
+
+
+Terraform Task - Security Group with EC2 (t3.micro3) 
+
+provider "aws" {
+      region = "ap-south-1"
+  }
+
+
+resource "aws_security_group" "himanshi_sg" {
+    name             = "himanshi-shh-sg"
+    description      = "Allow SSH to my server"        }
+
+
+    ingress {
+         from_port   = 22 
+         to_port     = 22 
+         protocol    = "tcp"
+         cidr_blocks = ["0.0.0.0/0"]
+} 
+    }
+
+
+
+resource "aws_instance" "himanshi_web"
+    ami                    = "ami-0abcd1234bcd1234"
+    instance_type          = "t3.micro"
+    vpc_security_group_ids = [aws_security_group.himanshi_sg.id]
+
+    tags = {        
+      Name = "himanshi-ec2"
+      } 
+ }
+
+
+Kubernetes Task - pod with Environment Variables
+
+
+apiVersion: v1
+kind: Pod
+metadata: 
+   name: himanshi-env-pod
+spec:
+  containers:
+    - name: web
+      image: nginx
+      env:
+        - name: APP_ENV
+          value: "Practice"
+        - name: OWNER
+          value: "himansnhi"
+
+
+
+
+Shell Script - Check File Exists
+
+
+#!/bin/bash
+FILE="/tmp/himanshi.txt"
+
+
+
+if [ -f "File" ]; then 
+   echo "File exists"
+esle
+   echo "File does not exist"
+fi
+
+
+
+Jenkins Pipeline - NodesJS Build
+
+pipelines {
+       agent any 
+            tools {
+                 nodejs 'NodeJs-16' }
+    
+                } 
+                 stages { 
+                      stage('Get Code') {   
+                         steps {
+                             git url: 'https://github.com/Pathnex/sample-node-app,git' }
+          }
+  }
+
+                       stage('Install Packages') {
+                           steps {
+                               sh 'npm install'
+            }
+ }
+                        stage('Tests') {
+                         steps
+                             sh 'npm test' }
+               }
+            }
+          }
+   }
+
+
+
+GitLab Ci - NodeJS Build
+
+
+stages:
+  - install
+  - test
+  - build
+
+install-jobs:
+  stage: install
+  image: node:16
+  script:
+    - npm install
+
+
+test-job:
+  stage: test
+  image: node:16
+  script:     
+      - npm test
+
+
+build-job:
+  stage: build
+  image: node:16
+  script: 
+   - npm run build
+
+
+
+
+
+
+
+
+
+
+
